@@ -1,6 +1,6 @@
 # future-battlegrounds-ui
 
-A simple UI for [battlegrounds](https://github.com/jorisvddonk/future-battlegrounds).
+A simple UI for [future-battlegrounds](https://github.com/jorisvddonk/future-battlegrounds).
 
 # Running
 
