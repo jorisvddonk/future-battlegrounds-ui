@@ -5,6 +5,7 @@ const stream = debounce(() => {
   oboe("http://localhost:8080/battleground/stream").done((obj) => {
     showShips(obj);
   }).fail((e) => {
+    battlegroundElem.classList.remove('connected');
     console.error(e);
     stream(); // retry!
   });
