@@ -1,3 +1,12 @@
 # future-battlegrounds-ui
 
-A simple UI for [https://github.com/jorisvddonk/future-battlegrounds](future-battlegrounds).
+A simple UI for [battlegrounds](https://github.com/jorisvddonk/future-battlegrounds).
+
+# Running
+
+Make sure you have a recent version of NodeJS, then:
+
+```
+npm ci
+npm run dev
+```
