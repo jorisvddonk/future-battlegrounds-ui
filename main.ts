@@ -34,6 +34,7 @@ function showShips(ships) {
     }
     const elem = shipsElem.children.item(index);
     elem.classList.add('ship');
-    elem.setAttribute('transform', `translate(${ship.position.x} ${ship.position.y})`);
+    const angle = Math.atan2(ship.rotationVector.y, ship.rotationVector.x) * (180 / Math.PI) - 90;
+    elem.setAttribute('transform', `translate(${ship.position.x} ${ship.position.y}) rotate(${angle})`);
   })
 }
