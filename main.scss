@@ -1,0 +1,23 @@
+#battleground {
+  background: #000;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+
+  &.connected {
+    opacity: 1.0;
+  }
+
+  .ships {
+    .ship {
+      width: 10px;
+      height: 10px;
+      fill: red;
+    }
+  }
+}
+
+html, body {
+  padding: 0px;
+  margin: 0px;
+}
