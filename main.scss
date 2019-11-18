@@ -17,7 +17,14 @@
   }
 }
 
+#timestamp {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+}
+
 html, body {
   padding: 0px;
   margin: 0px;
+  color: white;
 }

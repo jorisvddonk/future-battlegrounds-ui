@@ -1,9 +1,15 @@
 import oboe from "oboe";
 import { debounce } from "lodash";
 
+let shipsElem: SVGElement = document.querySelector("#battleground .ships");
+let battlegroundElem = document.querySelector('#battleground');
+let timestampElem = document.querySelector('#timestamp');
+
 const stream = debounce(() => {
-  oboe("http://localhost:8080/battleground/stream").done((obj) => {
-    showShips(obj);
+  oboe("http://localhost:8080/battleground/stage/stream").done((stage) => {
+    battlegroundElem.classList.add('connected');
+    showShips(stage.ships);
+    showTimestamp(stage.timestamp);
   }).fail((e) => {
     battlegroundElem.classList.remove('connected');
     console.error(e);
@@ -12,14 +18,10 @@ const stream = debounce(() => {
 }, 1000);
 stream();
 
-
-let shipsElem: SVGElement;
-let battlegroundElem = document.querySelector('#battleground');
 function showShips(ships) {
-  if (shipsElem === undefined) {
-    shipsElem = document.querySelector("#battleground .ships");
+  if (ships === undefined || ships === null) {
+    return;
   }
-  battlegroundElem.classList.add('connected');
 
 
   while (shipsElem.children.length > ships.length) {
@@ -37,4 +39,8 @@ function showShips(ships) {
     const angle = Math.atan2(ship.rotationVector.y, ship.rotationVector.x) * (180 / Math.PI) - 90;
     elem.setAttribute('transform', `translate(${ship.position.x} ${ship.position.y}) rotate(${angle})`);
   })
+}
+
+function showTimestamp(timestamp) {
+  timestampElem.innerHTML = parseFloat(timestamp).toFixed(1);
 }
