@@ -15,6 +15,15 @@
       fill: red;
     }
   }
+
+  .bullets {
+    .bullet {
+      width: 5px;
+      height: 5px;
+      fill: white;
+      transform: translate(-2.5px, -2.5px);
+    }
+  }
 }
 
 #timestamp {

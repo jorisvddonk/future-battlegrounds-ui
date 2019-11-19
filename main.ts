@@ -2,14 +2,16 @@ import oboe from "oboe";
 import { debounce } from "lodash";
 
 let shipsElem: SVGElement = document.querySelector("#battleground .ships");
+let bulletsElem: SVGElement = document.querySelector("#battleground .bullets");
 let battlegroundElem = document.querySelector('#battleground');
 let timestampElem = document.querySelector('#timestamp');
 
 const stream = debounce(() => {
-  oboe("http://localhost:8080/battleground/stage/stream").done((stage) => {
+  oboe("http://localhost:8080/battleground/stream").done((battleground) => {
     battlegroundElem.classList.add('connected');
-    showShips(stage.ships);
-    showTimestamp(stage.timestamp);
+    showShips(battleground.ships || []);
+    showBullets(battleground.bullets || []);
+    showTimestamp(battleground.timestamp);
   }).fail((e) => {
     battlegroundElem.classList.remove('connected');
     console.error(e);
@@ -19,11 +21,6 @@ const stream = debounce(() => {
 stream();
 
 function showShips(ships) {
-  if (ships === undefined || ships === null) {
-    return;
-  }
-
-
   while (shipsElem.children.length > ships.length) {
     shipsElem.removeChild(shipsElem.firstChild);
   }
@@ -32,12 +29,31 @@ function showShips(ships) {
     if (shipsElem.children.length <= index) {
       const newElem = document.createElementNS("http://www.w3.org/2000/svg", 'polygon');
       newElem.setAttribute('points', "-10,-10 0,20 10,-10");
+      newElem.classList.add('ship');
       shipsElem.appendChild(newElem);
     }
     const elem = shipsElem.children.item(index);
-    elem.classList.add('ship');
     const angle = Math.atan2(ship.rotationVector.y, ship.rotationVector.x) * (180 / Math.PI) - 90;
     elem.setAttribute('transform', `translate(${ship.position.x} ${ship.position.y}) rotate(${angle})`);
+  })
+}
+
+
+function showBullets(bullets) {
+  while (bulletsElem.children.length > bullets.length) {
+    bulletsElem.removeChild(bulletsElem.firstChild);
+  }
+
+  bullets.forEach((bullet, index) => {
+    if (bulletsElem.children.length <= index) {
+      const newElem = document.createElementNS("http://www.w3.org/2000/svg", 'rect');
+      newElem.classList.add('bullet');
+      bulletsElem.appendChild(newElem);
+    }
+    const elem = bulletsElem.children.item(index);
+    const angle = Math.atan2(bullet.rotationVector.y, bullet.rotationVector.x) * (180 / Math.PI) - 90;
+    elem.setAttribute('x', bullet.position.x);
+    elem.setAttribute('y', bullet.position.y);
   })
 }
 
