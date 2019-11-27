@@ -1,4 +1,3 @@
-import oboe from "oboe";
 import { debounce } from "lodash";
 
 let shipsElem: SVGElement = document.querySelector("#battleground .ships");
@@ -7,18 +6,25 @@ let battlegroundElem = document.querySelector('#battleground');
 let timestampElem = document.querySelector('#timestamp');
 
 const stream = debounce(() => {
-  oboe("http://localhost:8080/battleground/stream").done((battleground) => {
-    battlegroundElem.classList.add('connected');
-    showShips(battleground.ships || []);
-    showBullets(battleground.bullets || []);
-    showTimestamp(battleground.timestamp);
-  }).fail((e) => {
+  var webSocket = new WebSocket("ws://localhost:8080/ws/battleground");
+  webSocket.onmessage = function (msg) {
+    const battleground = JSON.parse(msg.data);
+    onBattleground(battleground);
+  };
+  webSocket.onclose = function () {
     battlegroundElem.classList.remove('connected');
-    console.error(e);
     stream(); // retry!
-  });
+  };
 }, 1000);
 stream();
+
+function onBattleground(battleground) {
+  battlegroundElem.classList.add('connected');
+  showShips(battleground.ships || []);
+  showBullets(battleground.bullets || []);
+  showTimestamp(battleground.timestamp);
+}
+
 
 function showShips(ships) {
   while (shipsElem.children.length > ships.length) {
