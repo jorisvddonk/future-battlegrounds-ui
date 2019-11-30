@@ -6,7 +6,7 @@ let battlegroundElem = document.querySelector('#battleground');
 let timestampElem = document.querySelector('#timestamp');
 
 const stream = debounce(() => {
-  var webSocket = new WebSocket("ws://localhost:8080/ws/battleground");
+  var webSocket = new WebSocket(`ws://${window.location.hostname}:8080/ws/battleground`);
   webSocket.onmessage = function (msg) {
     const battleground = JSON.parse(msg.data);
     onBattleground(battleground);
